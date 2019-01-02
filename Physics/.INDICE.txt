@@ -1,0 +1,17 @@
+1) pelotaBota
+2) pelotaOrbita(M)
+3) pelotasBotanViento
+4) pelotasRozamiento
+5) pelotasVelocidadTerminal
+6) pelotasAtracción(M)
+6.1) pelotasAtracciónRastro(M)
+6.2) pelotasAtracciónMutuo
+6.2.1) pelotasAtracciónMutuo(M)
+6.2.2) pelotasEstática
+6.2.3) pelotasEstáticaRepulsión
+7) flechasBotanViento
+8) flechasÓrbita(M)
+9) objetivoIntento
+10) cordenadasPolares
+11) pendulo
+12) penduloDibujos

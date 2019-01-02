@@ -1,0 +1,117 @@
+// The Nature of Code
+// Daniel Shiffman
+// http://natureofcode.com
+
+// Genetic Algorithm, Evolving Shakespeare
+
+// Demonstration of using a genetic algorithm to perform a search
+
+// setup()
+//  # Step 1: The Population 
+//    # Create an empty population (an array or ArrayList)
+//    # Fill it with DNA encoded objects (pick random values to start)
+
+// draw()
+//  # Step 1: Selection 
+//    # Create an empty mating pool (an empty ArrayList)
+//    # For every member of the population, evaluate its fitness based on some criteria / function, 
+//      and add it to the mating pool in a manner consistant with its fitness, i.e. the more fit it 
+//      is the more times it appears in the mating pool, in order to be more likely picked for reproduction.
+
+//  # Step 2: Reproduction Create a new empty population
+//    # Fill the new population by executing the following steps:
+//       1. Pick two "parent" objects from the mating pool.
+//       2. Crossover -- create a "child" object by mating these two parents.
+//       3. Mutation -- mutate the child's DNA based on a given probability.
+//       4. Add the child object to the new population.
+//    # Replace the old population with the new population
+//  
+//   # Rinse and repeat
+
+
+var target;
+var popmax; 
+var mutationRate;
+var population;
+var maxmut;
+var die;
+var survivors;
+
+var bestPhrase;
+var allPhrases;
+var stats;
+
+var dif;
+
+function setup() {
+
+  bestPhrase = createP("Best phrase:");
+  //bestPhrase.position(10,10);
+  bestPhrase.class("best");
+
+  allPhrases = createP("All phrases:");
+  allPhrases.position(600,10);
+  allPhrases.class("all");
+
+  stats = createP("Stats");
+  //stats.position(10,200);
+  stats.class("stats");
+  
+  //createCanvas(60, 360);
+  target = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  //mutationRate = 0.1;
+  popmax = target.length*2 + 1;
+  //maxmut=0.1;
+  die= popmax-1;
+  survivors= popmax-die;
+
+
+  // Create a population with a target phrase, mutation rate, and population max
+  population = new Population(target, popmax);
+
+
+}
+
+function draw() {
+  print("1");
+  //mutationRate += 0.00003;//*population.getGenerations()
+  //if(mutationRate>maxmut) mutationRate=maxmut;
+
+
+  
+  population.calcFitness();
+
+  population.evaluate();
+  // Generate mating pool
+  population.naturalSelection(survivors);
+  //Create next generation
+  population.generate(survivors,die);
+  // Calculate fitness
+  
+
+  // If we found the target phrase, stop
+  if (population.isFinished()) {
+    //println(millis()/1000.0);
+    noLoop();
+  }
+
+  displayInfo();
+}
+
+function displayInfo() {
+  // Display current status of population
+  var answer = population.getBest();
+  
+  bestPhrase.html("Best phrase:<br>" + answer);
+  
+  var statstext = "total generations:     " + population.getGenerations() + "<br>";
+  statstext +=    "average fitness:       " + nf(population.getAverageFitness()*2) + "<br>";
+  statstext +=    "total population:      " + popmax + "<br>";
+  statstext +=    "mutation rate:         " + floor(mutationRate * 100) + "%" + "<br>";
+  statstext +=    "people:                " + population.getGenerations()*die + "<br>"
+  statstext +=    "gens Length:           " + target.length + "<br>"
+  
+  stats.html(statstext);
+
+  allPhrases.html("All phrases:<br>" + population.allPhrases())
+}
